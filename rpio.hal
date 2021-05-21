@@ -1,0 +1,30 @@
+
+#loadrt hal_ext_gpio cfg="out 18"
+#loadrt hal_ext_gpio dir=40468484 exclude=26637299
+
+#addf hal_ext_gpio.read base-thread
+#addf hal_ext_gpio.write base-thread
+
+#net Xen => hal_ext_gpio.pin-03-out
+#
+loadrt hal_ext_gpio dir=40468484 exclude=26637299
+
+addf hal_ext_gpio.read base-thread
+addf hal_ext_gpio.write base-thread
+
+net Xen => hal_ext_gpio.pin-07-out
+#net Yen => hal_ext_gpio.pin-07-out
+#net Zen => hal_ext_gpio.pin-07-out
+
+net Xstep => hal_ext_gpio.pin-12-out
+net Ystep => hal_ext_gpio.pin-15-out
+net Zstep => hal_ext_gpio.pin-18-out
+
+net Xdir => hal_ext_gpio.pin-11-out
+net Ydir => hal_ext_gpio.pin-13-out
+net Zdir => hal_ext_gpio.pin-16-out
+
+net Xhome hal_ext_gpio.pin-29-in => joint.0.home-sw-in joint.0.neg-lim-sw-in
+net Yhome hal_ext_gpio.pin-32-in => joint.1.home-sw-in joint.1.neg-lim-sw-in
+net Zhome hal_ext_gpio.pin-33-in => joint.2.home-sw-in joint.2.neg-lim-sw-in
+
