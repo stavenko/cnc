@@ -8,11 +8,17 @@
 #net Xen => hal_ext_gpio.pin-03-out
 #
 loadrt hal_ext_gpio dir=40468484 exclude=26637299
-loadrt not count=1
+loadrt not count=4
+loadrt debounce cfg=3
 
 addf hal_ext_gpio.read base-thread
 addf hal_ext_gpio.write base-thread
 addf not.0 base-thread
+
+addf not.1 servo-thread
+addf not.2 servo-thread
+addf not.3 servo-thread
+addf debounce.0 servo-thread
 
 net Xen => not.0.in
 net Xen_neg not.0.out => hal_ext_gpio.pin-07-out
@@ -28,7 +34,14 @@ net Xdir => hal_ext_gpio.pin-11-out
 net Ydir => hal_ext_gpio.pin-13-out
 net Zdir => hal_ext_gpio.pin-16-out
 
-net Xhome hal_ext_gpio.pin-29-in => joint.0.home-sw-in #joint.0.neg-lim-sw-in
-net Yhome hal_ext_gpio.pin-32-in => joint.1.home-sw-in #joint.1.neg-lim-sw-in
-net Zhome hal_ext_gpio.pin-33-in => joint.2.home-sw-in #joint.2.neg-lim-sw-in
+net XRawhome hal_ext_gpio.pin-29-in => debounce.0.0.in
+net YRawhome hal_ext_gpio.pin-32-in => debounce.0.1.in
+net ZRawhome hal_ext_gpio.pin-33-in => debounce.0.2.in 
 
+net XNotHome debounce.0.0.out => not.1.in 
+net YNotHome debounce.0.1.out => not.2.in 
+net ZNotHome debounce.0.2.out => not.3.in 
+
+net XHome not.1.out => joint.0.home-sw-in #joint.0.neg-lim-sw-in
+net YHome not.2.out => joint.1.home-sw-in #joint.1.neg-lim-sw-in
+net ZHome not.3.out => joint.2.home-sw-in #joint.2.neg-lim-sw-in
